@@ -70,14 +70,15 @@ def _get_descrip_fields(fslhd):
     """
     Parse descrip field from nifti header to extract individual values
     """
-    fslhd_descrip = fslhd['descrip']
-    descrip_list = fslhd_descrip.split(';')
-
     descrip = {}
-    if descrip_list:
-        for d in descrip_list:
-            k,v = d.split('=')
-            descrip[k] = assign_type(v)
+
+    if fslhd.has_key('descrip'):
+        fslhd_descrip = fslhd['descrip']
+        descrip_list = fslhd_descrip.split(';')
+        if descrip_list:
+            for d in descrip_list:
+                k,v = d.split('=')
+                descrip[k] = assign_type(v)
 
     return descrip
 
