@@ -4,8 +4,8 @@
   "description": "FSL's fslhd reads fields from a NIfTI file header. This Gear takes that header and generates metadata that is placed upon the input file's info field in the Flywheel database. FSLHD reports every field of an Analyze or Nifti header (note that the fields are different although some are common, e.g. pixdims). The reported values are those used internally in FSL programs and are sometimes different from the raw values stored in the file to avoid incorrect settings (e.g. dimN has a minimum value of 1, not 0).",
   "maintainer": "Flywheel <support@flywheel.io>",
   "author": "Analysis Group, FMRIB, Oxford, UK.",
-  "url": "http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FEAT",
-  "source": "https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils",
+  "url": "https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils",
+  "source": "https://github.com/flywheel-apps/fsl-fslhd",
   "license": "Other",
   "flywheel": {
     "suite": "FSL"
