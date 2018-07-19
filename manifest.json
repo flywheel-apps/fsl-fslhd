@@ -16,12 +16,12 @@
   },
   "config": {
     "output_json": {
-      "description": "Default = 'false'. If selected, this will cause the Gear to output a json file (<inputfile>_fslhd.json) that consists of the fslhd info.",
+      "description": "Default = false. If selected, in addition to adding fslhd info to the input file's info object, the Gear will output a json file (<inputfile>_fslhd.json) that consists of the fslhd info.",
       "type": "boolean",
       "default": false
     },
     "parse_descrip": {
-      "description": "Default = 'true'. If selected, this will cause the Gear to attempt to parse the 'descrip' field in the header to generate an object from '<key>=<value>;' style entries.",
+      "description": "Default = true. Attempt to parse the 'descrip' field in the fslhd to generate an object from '<key>=<value>;' style entries.",
       "type": "boolean",
       "default": true
     }
