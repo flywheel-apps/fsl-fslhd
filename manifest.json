@@ -19,6 +19,11 @@
       "description": "Default = 'false'. If selected, this will cause the Gear to output a json file (<inputfile>_fslhd.json) that consists of the fslhd info.",
       "type": "boolean",
       "default": false
+    },
+    "parse_descrip": {
+      "description": "Default = 'true'. If selected, this will cause the Gear to attempt to parse the 'descrip' field in the header to generate an object from '<key>=<value>;' style entries.",
+      "type": "boolean",
+      "default": true
     }
   },
   "inputs": {
