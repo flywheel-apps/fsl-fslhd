@@ -82,7 +82,7 @@ def _get_descrip_fields(fslhd):
 
     return descrip
 
-def _write_metadata(nifti_file_name, fslhd_xml, output_json, parse_descrip, outbase='/flywheel/v0/output'):
+def _write_metadata(nifti_file_name, fslhd_xml, exsting_info, output_json, parse_descrip, outbase='/flywheel/v0/output'):
     """
     Extracts metadata from nifti file header and writes to .metadata.json.
     """
@@ -97,7 +97,7 @@ def _write_metadata(nifti_file_name, fslhd_xml, output_json, parse_descrip, outb
     # File metadata
     nifti_file = {}
     nifti_file['name'] = os.path.basename(nifti_file_name)
-    nifti_file['info'] = {}
+    nifti_file['info'] = exsting_info
     nifti_file['info']['fslhd'] = _extract_nifti_header(fslhd_xml)
 
     if parse_descrip:
@@ -148,6 +148,7 @@ if __name__ == '__main__':
     nifti_file_name = config['inputs']['nifti']['location']['name']
     output_json = config['config']['output_json']
     parse_descrip = config['config']['parse_descrip']
+    exsting_info = config['inputs']['nifti']['object']['info']
 
     # Generate xml
     fslhd_xml = '/tmp/fslhd_xml.xml'
@@ -159,7 +160,7 @@ if __name__ == '__main__':
         log.info('Could not extract nifti file header! Exiting')
         os.sys.exit(1)
 
-    metadatafile = _write_metadata(nifti_file_path, fslhd_xml, output_json, parse_descrip)
+    metadatafile = _write_metadata(nifti_file_path, fslhd_xml, exsting_info, output_json, parse_descrip)
 
     if os.path.exists(metadatafile):
         log.info('  generated %s' % metadatafile)
