@@ -12,6 +12,7 @@ from pprint import pprint
 logging.basicConfig()
 log = logging.getLogger('fslhd')
 
+
 def assign_type(s):
     """
     Sets the type of a given input.
@@ -46,7 +47,6 @@ def format_string(in_string):
     return formatted#.strip()
 
 
-
 def _extract_nifti_header(fslhd_xml):
     """
     Extract nifti header from xml
@@ -66,6 +66,7 @@ def _extract_nifti_header(fslhd_xml):
 
     return nifti_header
 
+
 def _get_descrip_fields(fslhd):
     """
     Parse descrip field from nifti header to extract individual values
@@ -74,13 +75,23 @@ def _get_descrip_fields(fslhd):
 
     if fslhd.has_key('descrip'):
         fslhd_descrip = fslhd['descrip']
-        descrip_list = fslhd_descrip.split(';')
-        if descrip_list:
-            for d in descrip_list:
-                k,v = d.split('=')
-                descrip[k] = assign_type(v)
+        log.info('Parsing descrip field...')
+        log.info('  ' + fslhd_descrip)
+        try:
+            descrip_list = fslhd_descrip.split(';')
+            if descrip_list:
+                for d in descrip_list:
+                    try:
+                        k,v = d.split('=')
+                        descrip[k] = assign_type(v)
+                    except:
+                        pass
+        except:
+            log.info('Failed to parse descrip!')
+            return None
 
     return descrip
+
 
 def _write_metadata(nifti_file_name, fslhd_xml, exsting_info, output_json, parse_descrip, outbase='/flywheel/v0/output'):
     """
