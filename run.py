@@ -47,7 +47,7 @@ def format_string(in_string):
     return formatted#.strip()
 
 
-def _extract_nifti_header(fslhd_xml):
+def _extract_nifti_xml_header(fslhd_xml):
     """
     Extract nifti header from xml
     """
@@ -63,6 +63,24 @@ def _extract_nifti_header(fslhd_xml):
         key = k.strip()
         value = v.replace('\'','').strip()
         nifti_header[key] = assign_type(value)
+
+    return nifti_header
+
+
+def _extract_nifti_text_header(fslhd_txt):
+    """
+    Extract nifti header from xml
+    """
+
+    with open(fslhd_txt, 'r') as f:
+        lines = f.readlines()
+
+    nifti_header = {}
+    for line in lines:
+        content = line.split()
+        if content and len(content) == 2:
+            key, value = content[0], content[1]
+            nifti_header[key] = assign_type(value)
 
     return nifti_header
 
@@ -93,14 +111,20 @@ def _get_descrip_fields(fslhd):
     return descrip
 
 
-def _write_metadata(nifti_file_name, fslhd_xml, exsting_info, output_json, parse_descrip, outbase='/flywheel/v0/output'):
+def _write_metadata(nifti_file_name, fslhd_xml, fslhd_txt, exsting_info, output_json, parse_descrip, outbase='/flywheel/v0/output'):
     """
     Extracts metadata from nifti file header and writes to .metadata.json.
     """
     import json
 
     # Grab the nifti_header from the xml
-    nifti_header = _extract_nifti_header(fslhd_xml)
+    nifti_xml_header = _extract_nifti_xml_header(fslhd_xml)
+    nifti_txt_header = _extract_nifti_text_header(fslhd_txt)
+
+    # Combine the header dictionaries
+    nifti_header = nifti_xml_header.copy()
+    pprint(nifti_header)
+    nifti_header.update(nifti_txt_header)
 
     # Build metadata
     metadata = {}
@@ -109,7 +133,7 @@ def _write_metadata(nifti_file_name, fslhd_xml, exsting_info, output_json, parse
     nifti_file = {}
     nifti_file['name'] = os.path.basename(nifti_file_name)
     nifti_file['info'] = exsting_info
-    nifti_file['info']['fslhd'] = _extract_nifti_header(fslhd_xml)
+    nifti_file['info']['fslhd'] = nifti_header
 
     if parse_descrip:
         nifti_file_descrip = _get_descrip_fields(nifti_file['info']['fslhd'])
@@ -171,7 +195,17 @@ if __name__ == '__main__':
         log.info('Could not extract nifti file header! Exiting')
         os.sys.exit(1)
 
-    metadatafile = _write_metadata(nifti_file_path, fslhd_xml, exsting_info, output_json, parse_descrip)
+    # Generate info file
+    fslhd_txt = '/tmp/fslhd.txt'
+    cmd = "fsl5.0-fslhd " + "\"%s\"  >  %s" % (nifti_file_path, fslhd_txt)
+    print(cmd)
+    status = os.system(cmd)
+
+    if status:
+        log.info('Could not extract nifti file header! Exiting')
+        os.sys.exit(1)
+
+    metadatafile = _write_metadata(nifti_file_path, fslhd_xml, fslhd_txt, exsting_info, output_json, parse_descrip)
 
     if os.path.exists(metadatafile):
         log.info('  generated %s' % metadatafile)
