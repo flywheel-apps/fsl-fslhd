@@ -1,3 +1,6 @@
+> [!WARNING]
+> This repo has moved to [https://gitlab.com/flywheel-io/flywheel-apps/fsl-fslhd](https://gitlab.com/flywheel-io/flywheel-apps/fsl-fslhd)
+
 [![Docker Pulls](https://img.shields.io/docker/pulls/flywheel/fsl-fslhd.svg)](https://hub.docker.com/r/flywheel/fsl-fslhd/)
 [![Docker Stars](https://img.shields.io/docker/stars/flywheel/fsl-fslhd.svg)](https://hub.docker.com/r/flywheel/fsl-fslhd/)
 
